@@ -1,0 +1,78 @@
+using System;
+
+namespace Laba_2
+
+{
+    public class Materials
+    {
+        private string name;//имя склада
+        private double rest_begin;//остаток в начале
+        private double taked;//получено
+        private double gived;//отдано
+        private double rest_end;//остаток в конце
+
+        //возвращают значения полей в мэйн
+        public double get_restb() { return rest_begin; }
+        public double get_taked() { return taked; }
+        public double get_gived() { return gived; }
+        public double get_reste() { return rest_end; }
+
+        private void calc_rest_end()
+        {//считает остаток в конце по формуле
+            rest_end = rest_begin + taked - gived;
+        }
+
+        public Materials(string nname, double beg, double ttaked, double ggived)
+        {//констуктор для заполнения полей
+            name = nname;
+            rest_begin = beg;
+            taked = ttaked;
+            gived = ggived;
+            calc_rest_end();
+        }
+
+        public void print_info()
+        {//печатает объект на экран
+            Console.WriteLine("| " + name + "\t||\t\t" + rest_begin.ToString() + "\t|\t" + taked.ToString() + "\t|\t" + gived.ToString() + "\t|\t\t" + rest_end.ToString() + "\t|");
+        }
+    }
+    class Program
+    {
+        public static void Main(string[] args)
+        {
+            int array_size;//размер массива
+
+            Console.Write("Size of array>> "); array_size = Convert.ToInt32(Console.ReadLine());
+
+            Materials[] array = new Materials[array_size];//выделение памяти массиву
+
+            for (int i = 0; i < array_size; i++)
+            {//читать инфу в массив с клавиатуры
+                string name; double buf1, buf2, buf3;
+                Console.Write("\nName of store #" + Convert.ToString(i + 1) + ">> "); name = Console.ReadLine();
+                Console.Write("Rest of materials periods begin>> "); buf1 = Convert.ToDouble(Console.ReadLine());
+                Console.Write("Taked materians(+)>> "); buf2 = Convert.ToDouble(Console.ReadLine());
+                Console.Write("Gived materials(-)>> "); buf3 = Convert.ToDouble(Console.ReadLine());
+                array[i] = new Materials(name, buf1, buf2, buf3);//заполнить объект считанными значениями
+            }
+
+            double together_restb = 0, together_taked = 0, together_gived = 0, together_reste = 0;//для получения значений "разом"
+            Console.Write("\n*************************************************************************************************\n\t\tList\n*************************************************************************************************\n");
+            Console.WriteLine("|\tName\t|\tRest begin\t|\tTaked\t|\tGived\t|\tRest end\t|");
+            for (int i = 0; i < array_size; i++)
+            {//выводит объекты на экран и считает "разом"
+                array[i].print_info();
+                together_restb += array[i].get_restb();
+                together_taked += array[i].get_taked();
+                together_gived += array[i].get_gived();
+                together_reste += array[i].get_reste();
+            }
+            Console.WriteLine("*************************************************************************************************");
+            Console.Write("Together\t|\t\t" + together_restb.ToString() + "\t|\t" + together_taked.ToString() + "\t|\t" + together_gived.ToString() + "\t|\t\t" + together_reste + "\t|");
+            //и выводит "разом" на экран
+
+            Console.Write("\n\nPress any key to continue . . . \n\n\n");
+            Console.ReadKey(true);
+        }
+    }
+}
